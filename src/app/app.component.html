@@ -1,0 +1,197 @@
+<div class="top-bar">
+  <div class="row">
+    <div class="top-bar-left">
+      <ul class="menu">
+        <li class="menu-text">Angular Note Keep</li>
+      </ul>
+    </div>
+    <div class="top-bar-right">
+
+    </div>
+  </div>
+</div>
+<br>
+
+
+<div class="row">
+  <div class="large-6 columns">
+    <button (click)="changeState('add')" class="button">Add Note</button>
+  </div>
+  <div class="large-6 columns">
+    <label> Filter Category
+        <select (change)="filterCategory(filteredCategory.value)" #filteredCategory>
+            <option value="0">Select</option>
+            <option *ngFor="let category of categories" value="{{category.name}}">{{category.name}}</option>
+        </select>
+    </label>
+  </div>
+</div>
+
+
+
+<!-- ADD FORM -->
+<div *ngIf="appState == 'add'" class="row">
+  <div class="large-12 columns">
+    <h3>Add Note</h3>
+    <form (submit)="addNote(
+        title.value,
+        category.value,
+        slug.value,
+        description.value,
+        author.value)">
+      <div class="large-6 columns">
+        <label> Title
+              <input type="text" placeholder=" Title"  #title>
+            </label>
+      </div>
+      <div class="large-6 columns">
+        <div class="large-6 columns">
+          <label>Category
+              <select #category>
+                <option value="0">Select</option>
+                <option *ngFor="let category of categories" value="{{category.name}}">{{category.name}}</option>
+              </select>
+             </label>
+        </div>
+      </div>
+
+
+  <div class="row">
+    <div class="medium-6 columns">
+      <label>Slug
+      <input type="text" placeholder="Slug" #slug>
+    </label>
+    </div>
+    <div class="medium-6 columns">
+      <label>Description
+               <textarea #description></textarea>
+            </label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="medium-6 columns">
+      <label>Author
+      <input type="text" placeholder="Author"   #author>
+    </label>
+    </div>
+    <div class="large-6">
+      <input type="submit" class="button" value="Submit">
+    </div>
+  </div>
+  </form>
+</div>
+</div>
+
+
+
+
+
+<!-- EDIT FORM -->
+<div *ngIf="appState == 'edit'" class="row">
+  <div class="large-12 columns">
+    <h3>Edit Note</h3>
+    <form (submit)="updateNote()">
+      <div class="row">
+        <div class="large-6 columns">
+          <label> Title
+              <input type="text" [(ngModel)]="activeTitle" name="activeTitle" placeholder="Title">
+            </label>
+        </div>
+        <div class="large-6 columns">
+          <label>Category
+              <select [(ngModel)]="activeCategory" name="activeCategory">
+                <option value="0">Select</option>
+                <option *ngFor="let category of categories" value="{{category.name}}">{{category.name}}</option>
+              </select>
+             </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="medium-6 columns">
+          <label>Slug
+              <input type="text" [(ngModel)]="activeSlug" name="activeSlug" placeholder="Slug">
+            </label>
+        </div>
+        <div class="medium-6 columns">
+          <label>Description
+               <textarea [(ngModel)]="activeDescription" name="activeDescription"></textarea>
+            </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="medium-6 columns">
+          <label>Author
+              <input type="text" placeholder="Author" [(ngModel)]="activeAuthor" name="activeAuthor">
+            </label>
+        </div>
+        <div class="large-6 columns">
+          <input type="submit" class="button" value="Submit">
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+<div *ngIf="appState == 'extend'">
+  <div class="row">
+    <div class="large-12 columns">
+      <button (click)="changeState('default')" class="button alert">Go Back</button>
+    </div>
+  </div>
+
+
+  <div *ngFor="let note of notes">
+    <div *ngIf="note.$key == activeKey">
+      <div class="row">
+        <div class="large-5 columns large-offset-1">
+          <h3>{{note.title}}</h3>
+          <p>Category: {{note.category}}</p>
+          <p>Author: {{note.author}}</p>
+        </div>
+        <div class="large-5 columns large-offset-1">
+          <h4>Description</h4>
+          <ul>
+            <li>{{note.description}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="large-12 columns">
+    <div *ngIf="notes">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Author</th>
+            <th>Slug</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let note of notes">
+            <td>{{note.title}}</td>
+            <td>{{note.category}}</td>
+            <td>{{note.author}}</td>
+            <td>{{note.slug}}</td>
+            <td>
+              <button (click)="changeState('extend', note.$key)" class="button">More</button>
+              <button (click)="showEdit(note)" class="button secondary">Edit</button>
+              <button (click)="deleteNote(note.$key)" class="button alert">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
